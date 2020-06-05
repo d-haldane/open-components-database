@@ -110,7 +110,7 @@ public defn closest-std-val (v:Double, tol:Double) :
 public pcb-component gen-cap-cmp (cap:Double, tol:Double, max-v:Double, pkg:String) :
   port p : pin[{1 2}]
   symbol = {capacitor-sym(false)}(p[1] => p[1], p[2] => p[2])
-  emodel = Capacitor(cap * 1.0e6, tol, max-v)
+  ; emodel = Capacitor(cap * 1.0e6, tol, max-v)
   package = {ipc-two-pin-package(pkg)}(p[1] => p[1], p[2] => p[2])
   reference-prefix = "C"
   spice :
@@ -160,7 +160,7 @@ public pcb-component gen-tant-cap-cmp (cap:Double, tol:Double, max-v:Double, pkg
     type => "electrolytic"
     anode => "tantalum"
     electrolyte => "polymer"
-    capacitance => (cap * 1.0e-6)
+    capacitance => cap
     rated-voltage => max-v
     tolerance => (tol * 0.01)
     rated-current-pk => 3.7
@@ -268,7 +268,7 @@ public defn res-strap (first-pin:Ref, second-pin:Ref, res:Double, tol:Double, pk
     unique inst rid : {gen-res-cmp(res, tol, pkg)}
     net ({first-pin}, {rid}.p[1])
     net ({second-pin}, {rid}.p[2])
-    {rid}
+    rid
 
 public defn res-strap (first-pin:Ref, second-pin:Ref, res:Double, pkg:String ) :
   res-strap(first-pin, second-pin, res, 2.0, pkg)
@@ -284,7 +284,7 @@ public defn cap-strap (first-pin:Ref, second-pin:Ref, capacitance, pkg:String ) 
     unique inst cap : {gen-cap-cmp(capacitance, pkg)}
     net ({first-pin}, {cap}.p[1])
     net ({second-pin}, {cap}.p[2])
-    {cap}
+    cap
 
 public defn default-bypass (cmp:Ref) :
   inside pcb-module:
@@ -313,7 +313,7 @@ public defn banana-plug (color:String) :
 
 public pcb-component pin-header (n-pin:Int, n-row:Int, pin-pitch:Double, row-pitch:Double) :
   description = "Generic pin-header"
-  mpn = to-string("%_X%_-pin-header" % [n-pin / 2 n-row])
+  mpn = to-string("%_X%_-pin-header" % [n-pin n-row])
   val ps = 
     if n-row == 1 :
       PinSpec $ #TABLE :
@@ -383,6 +383,17 @@ public defn add-testpoint (rs:Tuple<Ref>, method:String) :
 
 public defn add-testpoint (rs:Tuple<Ref>) :
   add-testpoint(rs, "pth-loop")
+
+public pcb-component gen-testpad (d:Double) :
+  pin tp
+  symbol = test-point-sym(tp => p[0])
+  package = {testpad(d)}(tp => tp)
+
+public defn add-testpad (rs:Tuple<Ref>, d:Double) :
+  inside pcb-module :
+    for r in rs do :
+      unique inst tp : {gen-testpad(d)}
+      net ({tp}.tp, {r})
 
 public defn filter (in:Ref, out:Ref, type:String, params:Tuple<Double>) :
   inside pcb-module:

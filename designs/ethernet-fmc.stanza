@@ -43,6 +43,10 @@ pcb-module my-design :
   require eth-1:ethernet-1000 from ethernet-jack[1]
   connect phy (rgmii[1], eth-1)
 
+  schematic-group(fmc) = fmc
+  schematic-group(ethernet-jack) = ethernet-jack
+  schematic-group(fpga) = fpga
+
   ; Geometry constraints
   package(fmc) at loc(-18.5, 0.0, 90.0) on Top
   package(ethernet-jack[0]) at loc(15.0, 22.0, 270.0) on Top
@@ -59,5 +63,5 @@ export-kicad("ethernet-fmc", [`place => true
                           `gen-board => true 
                           `gen-schematic => true 
                           `fresh => true 
-                          `schematic-version => 1
+                          `schematic-version => 3
                           `param-configs => [`sketch]] )

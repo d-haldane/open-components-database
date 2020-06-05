@@ -1,0 +1,65 @@
+#use-added-syntax(esir)
+defpackage ocdb/microchip/MCP9600:
+  import core
+  import collections
+  import math
+  import esir
+  import esir/utils
+  import esir/gen
+  import ocdb/tests/default-harness
+
+  import ocdb/land-patterns
+  import ocdb/symbols
+  import ocdb/box-symbol
+  import ocdb/pinspec
+  import ocdb/bundles
+  import ocdb/generator-utils
+  import ocdb/generic-components
+
+  import jitpcb/visualizer
+
+public unique pcb-component component :
+  manufacturer = "Microchip"
+  mpn = "MCP9600"
+  description = "Thermocouple EMF to Temperature Converter, ±1.5°C Maximum Accuracy"
+  
+  val ps = PinSpec $ #TABLE :
+    [Ref      | Int ...         | Dir     ]
+    [GND      | 1, 3, 5, 6, 7, 9, 10, 13, 17, 18, 21 | Down  ]
+    [Vin+     | 2               | Right   ]
+    [Vin-     | 4               | Right   ]
+    [Vdd      | 8               | Up      ]
+    [Alert1   | 11              | Left    ]
+    [Alert2   | 12              | Left    ]
+    [Alert3   | 14              | Left    ]
+    [Alert4   | 15              | Left    ]
+    [ADDR     | 16              | Left    ]
+    [SCL      | 19              | Left    ]
+    [SDA      | 20              | Left    ]
+
+  make-pins(ps)
+  make-box-symbol(ps)
+  assign-package(qfn-package(0.65, 5.0, 20, 0.3, 0.4, [3.25 3.25]), ps)
+
+public unique pcb-module module :
+  port power : power
+  port i2c : i2c
+  port alert : pin[4]
+  port in : diff-pair
+
+  inst therm : {ocdb/microchip/MCP9600/component}
+  net gnd (therm.GND power.gnd)
+  net (power.vdd, therm.Vdd)
+  cap-strap(therm.Vdd, gnd, 1.0e-6)
+
+  properties(therm.Vdd):
+    power-request => [3.0 0.005 5.0e-5]
+    gnd-ref => #R(gnd)
+
+  net (alert[0], therm.Alert1)
+  net (alert[1], therm.Alert2)
+  net (alert[2], therm.Alert3)
+  net (alert[3], therm.Alert4)
+  net (therm.Vin- in.N)
+  net (therm.Vin+ in.P)
+
