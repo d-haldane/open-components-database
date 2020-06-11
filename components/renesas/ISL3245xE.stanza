@@ -1,0 +1,58 @@
+#use-added-syntax(esir)
+defpackage ocdb/renesas/ISL3245xE :
+  import core
+  import collections
+  import math
+  import esir
+  import esir/utils
+  import esir/gen
+  import ocdb/tests/default-harness
+  import ocdb/pinspec
+  import ocdb/land-patterns
+  import ocdb/generator-utils
+  import ocdb/generic-components
+  import ocdb/bundles
+  import ocdb/symbols
+  import ocdb/box-symbol
+
+public unique pcb-component component :
+  name = "ISL32458E"
+  manufacturer = "Renesas"
+  mpn = "ISL32458E"
+  description = "±60V Fault Protected, 3.3V to 5V, ±20V CMR, 20Mbps Half-Duplex RS-485/RS-422, ±15kV ESD"
+  val ps = PinSpec $ #TABLE :
+    [receiver-out | 1  | Right]
+    [receiver-out-en_n | 2  | Right]
+    [driver-en | 3  | Right]
+    [driver-in | 4 | Right]
+    [gnd | 5  | Down]
+    [d+ | 6  | Left]
+    [d- | 7  | Left]
+    [vcc | 8 | Up]
+  gen-symbol-map(ps, soic127p-package(8))
+
+  properties:
+    rated-temperature => [-40.0 105.0]
+
+public unique pcb-module module :
+  port rs845:rs485 
+  port uart:uart 
+  port power : power
+  pin drive-en
+
+  inst tr : {ocdb/renesas/ISL3245xE/component}
+  cap-strap(tr.vcc, tr.gnd, 1.0e-6)
+  net gnd (power.gnd, tr.gnd)
+  net (power.vdd, tr.vcc)
+  net (rs485.N tr.d-)
+  net (rs485.P tr.d+)
+  net (uart.tx, tr.driver-in)
+  net (uart.rx, tr.receiver-out)
+
+
+
+
+
+
+
+

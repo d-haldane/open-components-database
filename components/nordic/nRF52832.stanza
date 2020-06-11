@@ -123,7 +123,9 @@ public unique pcb-module module :
 
   ; External oscillator
   inst xtal : {ocdb/abracon/ABM12-32-B2X-T3/component}
+  short-trace(proc.xc[0], xtal.p[1])
   net XC1 (proc.xc[0], xtal.p[1])
+  short-trace(proc.xc[1], xtal.p[2])
   net XC2 (proc.xc[1], xtal.p[2])
   add-xtal-caps(xtal)
   net (gnd, xtal.g[1], xtal.g[2])

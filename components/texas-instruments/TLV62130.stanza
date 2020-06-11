@@ -38,6 +38,8 @@ public unique pcb-component component :
   gen-symbol-map(ps, qfn-package(0.5, 3.0, 16, 0.24, 0.5, [1.68, 1.68]))
 
 public pcb-module module (v-out:Double):
+  port src : power
+  port dst : power
   pin vin
   pin vout
   pin gnd
@@ -50,8 +52,8 @@ public pcb-module module (v-out:Double):
   inst buck : {ocdb/texas-instruments/TLV62130/component}
   inst l    : {ocdb/abracon/ASPI-0530HI/component(2.2)}
 
-  net (gnd buck.AGND buck.PGND buck.PAD buck.DEF buck.FSW)
-  net (vin buck.AVIN buck.PVIN)
+  net (gnd buck.AGND buck.PGND buck.PAD buck.DEF buck.FSW src.gnd dst.gnd)
+  net (vin buck.AVIN buck.PVIN src.vdd)
   cap-strap(buck.PVIN, gnd, 10.0e-6)
   cap-strap(buck.PVIN, gnd, 1.0e-6)
 
@@ -59,11 +61,15 @@ public pcb-module module (v-out:Double):
   cap-strap(buck.SS, gnd, 3.3e-9)
 
   net sw (l.p[1] buck.SW)
-  net (vout l.p[2] buck.VOS)
+  net (vout l.p[2] buck.VOS dst.vdd)
   net (pg buck.PG)
   res-strap(l.p[2], buck.PG, 100.0e3)
   res-strap(l.p[2], buck.FB, r1)
   res-strap(gnd,    buck.FB, r2)
 
   cap-strap(vout, gnd, 22.0e-6)
+
+  properties(l.p[2]):
+    supply-pin => true
+    voltage => v-out
 

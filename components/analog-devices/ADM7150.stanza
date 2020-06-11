@@ -33,6 +33,14 @@ public pcb-component component (v-out:Double) :
     5.0 : "5.0"
     else : fatal("Invalid output voltage for ADM7150 %_" % [v-out])
   mpn = to-string("ADM7150ARDZ-%_-R7" % [a-code])
+  pin vin 
+  pin en  
+  pin vreg
+  pin byp 
+  pin vout     
+  pin ref      
+  pin ref-sense
+  pin gnd
   val ps = PinSpec $ #TABLE :
     [Ref | Int ...   | Dir  ]
     [vin  | 8 | Left]
@@ -43,7 +51,8 @@ public pcb-component component (v-out:Double) :
     [ref       | 6 | Right] 
     [ref-sense | 5 | Right]
     [gnd | 4 9 | Down]
-  gen-symbol-map(ps, soic127p-package(8, [2.3 3.0]))
+  make-box-symbol(ps)
+  assign-package(soic127p-package(8, [2.3 3.0]), ps)
 
 doc: \<s>
 Example Usage:
@@ -71,7 +80,7 @@ public pcb-module module (v-out) :
   net (dst.gnd gnd)
   net (dst.vdd vout)
   net (src.gnd gnd)
-  net (src.vdd vout)
+  net (src.vdd vin)
   inst ps : {ocdb/analog-devices/ADM7150/component(v-out)}
   cap-strap(ps.vin,  gnd, 10.0e-6)
   cap-strap(ps.vout, gnd, 10.0e-6)

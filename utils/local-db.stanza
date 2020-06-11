@@ -20,6 +20,8 @@ val uri-string = "mongodb://localhost:27017"
 val uri = MongoURI(uri-string)
 val client = MongoClient(uri)
 val collection = get-collection(client, "config", "testCapacitors")
+val pkg-list = ["008004", "01005", "0201" , "0402" , "0603" , "0805", 
+                "1206" , "1210" , "2010" , "2512" , "2920"]
 
 defn find-cap (request:Tuple<KeyValue>) :
   val queryAggr = Vector<KeyValue>()
@@ -42,7 +44,11 @@ defn find-cap (request:Tuple<KeyValue>) :
   add(queryAggr, "rated-temperature.min" => JObject $ ["$lt" => OPERATING-TEMPERATURE[0]])
   add(queryAggr, "rated-temperature.max" => JObject $ ["$gt" => OPERATING-TEMPERATURE[1]])
   add(queryAggr, "dimensions.z" => JObject $ ["$lt" => MAX-Z])
-  
+  val pkgAggr = Vector<JObject>()
+  for p in pkg-list[index-of!(pkg-list, MIN-PKG) to false] do :
+    add(pkgAggr, JObject $ ["package.arg" => p])
+  add(queryAggr, "$or" => to-tuple(pkgAggr))
+
   val optAggr = Vector<KeyValue>()
   for s in OPTIMIZE-FOR do :
     switch(s):
@@ -56,7 +62,8 @@ defn find-cap (request:Tuple<KeyValue>) :
     ["limit" => 10,
      "sort" => JObject $ to-tuple(optAggr)
      ]
-
+  if empty?(find(collection, JObject $ to-tuple(queryAggr), opts)):
+    fatal("No capacitor matching requirements %_" % [queryAggr])
   next(find(collection, JObject $ to-tuple(queryAggr), opts)) as JObject
 
 defn make-cap (json:JObject):

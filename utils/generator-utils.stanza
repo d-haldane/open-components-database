@@ -188,7 +188,7 @@ public defn apply-lvds-params (rated-voltage:[Double,Double], vol:Double, voh:Do
 ; Check utilities
 ;================
 ; User defined pass that gets run at end of design pipeline
-public pcb-check final-pass ():
+public defn final-pass ():
   ; println("Final pass")
   defn propogate-voltage (n:NetStmt) :
     val supply-pin  = for p in refs(n) find : has-property?(p.voltage)
@@ -202,6 +202,7 @@ public pcb-check final-pass ():
               println("Incompatible supply voltages on same net.")
           else :
             inside pcb-module:
+              ; println("Propogating %_ to %_" % [v p])
               properties({p}):
                 voltage => v
   for n in nets(self) do :
@@ -209,23 +210,24 @@ public pcb-check final-pass ():
 
 public defn check-design () :
   inside pcb-module:
-    check final-pass()
+    lower-esir()
+    run-user-pass(final-pass)
 
-    for (instance in all-component-instances(self)) do :
-      properties({instance}):
-        temperature => DESIGN-TEMPERATURE
-      ; Check components
-      if has-property?(instance.resistor) :
-        check resistor-check(instance)
-      if has-property?(instance.capacitor) :
-        check capacitor-check(instance)
+    ; for (instance in all-component-instances(self)) do :
+    ;   properties({instance}):
+    ;     temperature => DESIGN-TEMPERATURE
+    ;   ; Check components
+    ;   if has-property?(instance.resistor) :
+    ;     check resistor-check(instance)
+    ;   if has-property?(instance.capacitor) :
+    ;     check capacitor-check(instance)
 
-    ; Check pins
-      for p in ports(instance) do :
-        if has-property?(p.power-pin) :
-          check power-pin(p)
+    ; ; Check pins
+    ;   for p in ports(instance) do :
+    ;     if has-property?(p.power-pin) :
+    ;       check power-pin(p)
 
-    check io()
+    ; check io()
 
 public defn connect-floating-inputs-to-gnd ():
   inside pcb-module :
