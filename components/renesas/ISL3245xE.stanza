@@ -21,6 +21,7 @@ public unique pcb-component component :
   mpn = "ISL32458E"
   description = "±60V Fault Protected, 3.3V to 5V, ±20V CMR, 20Mbps Half-Duplex RS-485/RS-422, ±15kV ESD"
   val ps = PinSpec $ #TABLE :
+    [Ref     | Int ...   | Dir]
     [receiver-out | 1  | Right]
     [receiver-out-en_n | 2  | Right]
     [driver-en | 3  | Right]
@@ -35,15 +36,19 @@ public unique pcb-component component :
     rated-temperature => [-40.0 105.0]
 
 public unique pcb-module module :
-  port rs845:rs485 
+  port rs485:rs485 
   port uart:uart 
   port power : power
   pin drive-en
+  pin gnd
 
   inst tr : {ocdb/renesas/ISL3245xE/component}
   cap-strap(tr.vcc, tr.gnd, 1.0e-6)
-  net gnd (power.gnd, tr.gnd)
+  net (gnd power.gnd, tr.gnd)
   net (power.vdd, tr.vcc)
+  properties(tr.vcc):
+    power-request => [3.3 0.02 5.0e-3]
+    gnd-ref => #R(gnd)
   net (rs485.N tr.d-)
   net (rs485.P tr.d+)
   net (uart.tx, tr.driver-in)

@@ -501,6 +501,11 @@ public unique pcb-module module :
     supports gpio :
       require p:fpga-io from fpga
       gpio => p.io
+  for i in 0 to 20 do :
+    supports uart :
+      require p:fpga-io[2] from fpga
+      tx => p[0].io
+      rx => p[1].io
   supports reset :
     require r:reset from fpga
     reset => r.reset

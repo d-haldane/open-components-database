@@ -1,0 +1,209 @@
+#use-added-syntax(esir)
+defpackage ocdb/stmicroelectronics/STM32F427 :
+  import core
+  import collections
+  import math
+  import esir
+  import esir/utils
+  import esir/gen
+  import ocdb/tests/default-harness
+
+  import ocdb/land-patterns
+  import ocdb/symbols
+  import ocdb/box-symbol
+  import ocdb/pinspec
+  import ocdb/bundles
+  import ocdb/generator-utils
+  import ocdb/generic-components
+
+public pcb-component component :
+  name = "STM32F427"
+  manufacturer = "STMicroelectronics"
+  mpn = "STM32F427ZIT6TR"
+  description = "32b Arm ® Cortex ® -M4 MCU+FPU, 225DMIPS, up to 2MB Flash/256+4KB RAM, USB OTG HS/FS, Ethernet, 17 TIMs, 3 ADCs, 20 com. interfaces, camera & LCD-TFT"
+  val ps = PinSpec $ #TABLE :
+    [ Ref    | Int ...                                 | Dir   | Ref ]
+    [ BOOT0  | 138                                     | Left  | misc ]
+    [ NRST   | 25                                      | Left  | misc ]
+    [ PH0    | 23                                      | Left  | misc ]
+    [ PH1    | 24                                      | Left  | misc ]
+    [ VBAT   | 6                                       | Up    | misc ]
+    [ VCAP_1 | 71                                      | Up    | misc ]
+    [ VCAP_2 | 106                                     | Up    | misc ]
+    [ PDR_ON | 143                                     | Left  | misc ]
+    [ PA0    | 34                                      | Left  | A ]
+    [ PA1    | 35                                      | Left  | A ]
+    [ PA2    | 36                                      | Left  | A ]
+    [ PA3    | 37                                      | Left  | A ]
+    [ PA4    | 40                                      | Left  | A ]
+    [ PA5    | 41                                      | Left  | A ]
+    [ PA6    | 42                                      | Left  | A ]
+    [ PA7    | 43                                      | Left  | A ]
+    [ PA8    | 100                                     | Left  | A ]
+    [ PA9    | 101                                     | Left  | A ]
+    [ PA10   | 102                                     | Left  | A ]
+    [ PA11   | 103                                     | Left  | A ]
+    [ PA12   | 104                                     | Left  | A ]
+    [ PA13   | 105                                     | Left  | A ]
+    [ PA14   | 109                                     | Left  | A ]
+    [ PA15   | 110                                     | Left  | A ]
+    [ PB0    | 46                                      | Left  | B ]
+    [ PB1    | 47                                      | Left  | B ]
+    [ PB2    | 48                                      | Left  | B ]
+    [ PB3    | 133                                     | Left  | B ]
+    [ PB4    | 134                                     | Left  | B ]
+    [ PB5    | 135                                     | Left  | B ]
+    [ PB6    | 136                                     | Left  | B ]
+    [ PB7    | 137                                     | Left  | B ]
+    [ PB8    | 139                                     | Left  | B ]
+    [ PB9    | 140                                     | Left  | B ]
+    [ PB10   | 69                                      | Left  | B ]
+    [ PB11   | 70                                      | Left  | B ]
+    [ PB12   | 73                                      | Left  | B ]
+    [ PB13   | 74                                      | Left  | B ]
+    [ PB14   | 75                                      | Left  | B ]
+    [ PB15   | 76                                      | Left  | B ]
+    [ PC0    | 26                                      | Left  | C ]
+    [ PC1    | 27                                      | Left  | C ]
+    [ PC2    | 28                                      | Left  | C ]
+    [ PC3    | 29                                      | Left  | C ]
+    [ PC4    | 44                                      | Left  | C ]
+    [ PC5    | 45                                      | Left  | C ]
+    [ PC6    | 96                                      | Left  | C ]
+    [ PC7    | 97                                      | Left  | C ]
+    [ PC8    | 98                                      | Left  | C ]
+    [ PC9    | 99                                      | Left  | C ]
+    [ PC10   | 111                                     | Left  | C ]
+    [ PC11   | 112                                     | Left  | C ]
+    [ PC12   | 113                                     | Left  | C ]
+    [ PC13   | 7                                       | Left  | C ]
+    [ PC14   | 8                                       | Left  | C ]
+    [ PC15   | 9                                       | Left  | C ]
+    [ PD0    | 114                                     | Left  | D ]
+    [ PD1    | 115                                     | Left  | D ]
+    [ PD2    | 116                                     | Left  | D ]
+    [ PD3    | 117                                     | Left  | D ]
+    [ PD4    | 118                                     | Left  | D ]
+    [ PD5    | 119                                     | Left  | D ]
+    [ PD6    | 122                                     | Left  | D ]
+    [ PD7    | 123                                     | Left  | D ]
+    [ PD8    | 77                                      | Left  | D ]
+    [ PD9    | 78                                      | Left  | D ]
+    [ PD10   | 79                                      | Left  | D ]
+    [ PD11   | 80                                      | Left  | D ]
+    [ PD12   | 81                                      | Left  | D ]
+    [ PD13   | 82                                      | Left  | D ]
+    [ PD14   | 85                                      | Left  | D ]
+    [ PD15   | 86                                      | Left  | D ]
+    [ PE0    | 141                                     | Left  | E ]
+    [ PE1    | 142                                     | Left  | E ]
+    [ PE2    | 1                                       | Left  | E ]
+    [ PE3    | 2                                       | Left  | E ]
+    [ PE4    | 3                                       | Left  | E ]
+    [ PE5    | 4                                       | Left  | E ]
+    [ PE6    | 5                                       | Left  | E ]
+    [ PE7    | 58                                      | Left  | E ]
+    [ PE8    | 59                                      | Left  | E ]
+    [ PE9    | 60                                      | Left  | E ]
+    [ PE10   | 63                                      | Left  | E ]
+    [ PE11   | 64                                      | Left  | E ]
+    [ PE12   | 65                                      | Left  | E ]
+    [ PE13   | 66                                      | Left  | E ]
+    [ PE14   | 67                                      | Left  | E ]
+    [ PE15   | 68                                      | Left  | E ]
+    [ PF0    | 10                                      | Left  | F ]
+    [ PF1    | 11                                      | Left  | F ]
+    [ PF2    | 12                                      | Left  | F ]
+    [ PF3    | 13                                      | Left  | F ]
+    [ PF4    | 14                                      | Left  | F ]
+    [ PF5    | 15                                      | Left  | F ]
+    [ PF6    | 18                                      | Left  | F ]
+    [ PF7    | 19                                      | Left  | F ]
+    [ PF8    | 20                                      | Left  | F ]
+    [ PF9    | 21                                      | Left  | F ]
+    [ PF10   | 22                                      | Left  | F ]
+    [ PF11   | 49                                      | Left  | F ]
+    [ PF12   | 50                                      | Left  | F ]
+    [ PF13   | 53                                      | Left  | F ]
+    [ PF14   | 54                                      | Left  | F ]
+    [ PF15   | 55                                      | Left  | F ]
+    [ PG0    | 56                                      | Left  | G ]
+    [ PG1    | 57                                      | Left  | G ]
+    [ PG2    | 87                                      | Left  | G ]
+    [ PG3    | 88                                      | Left  | G ]
+    [ PG4    | 89                                      | Left  | G ]
+    [ PG5    | 90                                      | Left  | G ]
+    [ PG6    | 91                                      | Left  | G ]
+    [ PG7    | 92                                      | Left  | G ]
+    [ PG8    | 93                                      | Left  | G ]
+    [ PG9    | 124                                     | Left  | G ]
+    [ PG10   | 125                                     | Left  | G ]
+    [ PG11   | 126                                     | Left  | G ]
+    [ PG12   | 127                                     | Left  | G ]
+    [ PG13   | 128                                     | Left  | G ]
+    [ PG14   | 129                                     | Left  | G ]
+    [ PG15   | 132                                     | Left  | G ]
+    [ VDD    | 17 30 39 52 62 72 84 95 108 121 131 144 | Up    | power ]
+    [ VDDA   | 33                                      | Up    | power ]
+    [ VREF+  | 32                                      | Up    | power ]
+    [ VSS    | 16 38 51 61 83 94 107 120 130           | Down    | power ]
+    [ VSSA   | 31                                      | Down    | power ]
+
+  gen-symbol-map(ps, qfp-package(0.5, 22.6, 144, 0.35, 1.35))
+
+public pcb-module module :
+  port power:power
+  inst mcu : {ocdb/stmicroelectronics/STM32F427/component}
+  pin gnd
+
+  for i in 0 to 12 do :
+    cap-strap(mcu.VSS, mcu.VDD, 1.0e-6)  
+    cap-strap(mcu.VSS, mcu.VDD, 0.1e-6)  
+
+  net (power.gnd, mcu.VSS, gnd)
+  net (power.vdd, mcu.VDD)
+  
+  properties(mcu.VDD):
+    power-request => [3.3 0.1 5.0e-3]
+    gnd-ref => #R(gnd)
+
+
+  supports uart :
+    tx => mcu.PA9
+    rx => mcu.PA10
+  supports uart :
+    tx => mcu.PA2
+    rx => mcu.PA3
+  supports uart :
+    tx => mcu.PC10
+    rx => mcu.PC11
+  supports uart :
+    tx => mcu.PA0
+    rx => mcu.PA1
+  supports uart :
+    tx => mcu.PC12
+    rx => mcu.PD2  
+  supports uart :
+    tx => mcu.PG9
+    rx => mcu.PG14   
+  supports uart :
+    tx => mcu.PE7
+    rx => mcu.PE8  
+  supports uart :
+    tx => mcu.PE0
+    rx => mcu.PE1  
+  
+  supports rgmii:
+    txd[0] => mcu.PB12
+    txd[1] => mcu.PB13
+    txd[2] => mcu.PC2
+    txd[3] => mcu.PB8
+    rxd[0] => mcu.PC4
+    rxd[1] => mcu.PC5
+    rxd[2] => mcu.PB0
+    rxd[3] => mcu.PB1
+    tx-clk => mcu.PC3
+    tx-ctrl => mcu.PB11
+    rx-clk => mcu.PA1
+    rx-ctrl => mcu.PB10
+

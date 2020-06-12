@@ -19,6 +19,9 @@ public pcb-bundle diff-pair :
 public pcb-bundle lvds : 
   diff-pair-pins()
 
+public pcb-bundle rs485 : 
+  diff-pair-pins()
+
 public pcb-bundle SPST :
   pin p
   pin t

@@ -1,0 +1,24 @@
+#use-added-syntax(esir)
+defpackage ocdb/samtec/QSH :
+  import core
+  import collections
+  import math
+  import esir
+  import esir/utils
+  import esir/gen
+  import ocdb/tests/default-harness
+  import ocdb/pinspec
+  import ocdb/land-patterns
+  import ocdb/generator-utils
+  import ocdb/generic-components
+  import ocdb/bundles
+  import ocdb/symbols
+  import ocdb/box-symbol
+
+public unique pcb-component component :
+  name = "QPL9065SR"
+  manufacturer = "Qorvo"
+  mpn = "QPL9065SR"
+  description = "RF Amplifier .45-3.8GHz NF .55dB Gain 37.5dB"
+  val ps = PinSpec $ #TABLE :
+    [Ref     | Int ...   | Dir]

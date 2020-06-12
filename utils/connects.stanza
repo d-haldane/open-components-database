@@ -37,3 +37,14 @@ public pcb-connection phy (x:Ref, y:Ref) :
   schematic-group({phy}) = phy
 when :
   port-type(x) == #PT(rgmii) and port-type(y) == #PT(ethernet-1000)
+
+public pcb-connection transceiver (x:Ref, y:Ref) :
+  val [uart, rs485] = 
+    if port-type(x) == #PT(uart) : [x, y]
+    else : [y, x]
+  unique inst tr : {ocdb/renesas/ISL3245xE/module}
+  net ({tr}.rs485, {rs485})
+  net ({tr}.uart, {uart})
+when :
+  (port-type(x) == #PT(uart) and port-type(y) == #PT(rs485)) or
+  (port-type(y) == #PT(uart) and port-type(x) == #PT(rs485))
