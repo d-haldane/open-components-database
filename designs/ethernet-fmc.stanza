@@ -59,9 +59,5 @@ lower-esir()
 run-user-pass(generate-power)
 
 view(main-design)
-; export-kicad("ethernet-fmc", [`place => true 
-;                           `gen-board => true 
-;                           `gen-schematic => true 
-;                           `fresh => true 
-;                           `schematic-version => 3
-;                           `param-configs => [`sketch]] )
+
+export-cad("ethernet-fmc", "kicad")
