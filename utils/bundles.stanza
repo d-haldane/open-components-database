@@ -84,6 +84,9 @@ public pcb-bundle trd :
   port trd : diff-pair
   pin common
 
+public pcb-bundle usb :
+  port data : diff-pair
+
 public pcb-bundle rgb-led :
   pin r
   pin g
