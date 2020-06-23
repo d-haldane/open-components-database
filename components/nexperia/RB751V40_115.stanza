@@ -1,5 +1,5 @@
 #use-added-syntax(esir)
-defpackage ocdb/laird/LI0805H151R-10 :
+defpackage ocdb/nexperia/RB751V40_115:
   import core
   import collections
   import math
@@ -17,12 +17,12 @@ defpackage ocdb/laird/LI0805H151R-10 :
   import ocdb/generic-components
 
 public unique pcb-component component :
-  manufacturer = "Laird-Signal Integrity Products"
-  description = "FERRITE BEAD 150 OHM 0805 1LN "
-  mpn = "LI0805H151R-10"
+  manufacturer = "Nexperia USA Inc."
+  description = "Diode Schottky 40V 120mA (DC) Surface Mount SOD-323"
+  mpn = "RB751V40,115"
 
-  port p : pin[{1 2}]
-  package = {ipc-two-pin-package("0805")}(p[1] => p[1], p[2] => p[2]) 
-  symbol = inductor-sym(p[1] => p[1], p[2] => p[2])
-  reference-prefix = "FB"
-
+  pin a
+  pin c
+  package = {two-pin-package(3.43, 1.45, 0.83, 3.93, 1.95)}(c => p[1], a => p[2]) 
+  symbol = {diode-sym("schottky")}(a => a,c => c) 
+  reference-prefix = "D"
