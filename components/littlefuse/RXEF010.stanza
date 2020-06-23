@@ -27,6 +27,6 @@ public unique pcb-component component :
 
   pin p[1]
   pin p[2]
-  symbol = {fuse-sym}(p[1] => p[0],p[2] => p[1])
+  symbol = fuse-sym(p[1] => p[0],p[2] => p[1])
   package = {fuse-RXEF010-package}(p[1] => p[1],p[2] => p[2]) 
   reference-prefix = "F"
