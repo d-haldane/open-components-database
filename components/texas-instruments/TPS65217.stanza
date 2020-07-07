@@ -218,7 +218,7 @@ public pcb-module module :
   net (SYS_MAIN l4.p[2])
   net (wled_sw d1.a)
   net (WLED_ANODE d1.c pmic.FB_WLED)
-  cap-strap(WLED_ANODE, GND, 4.7) ;50V rated
+  cap-strap(WLED_ANODE, GND, 4.7e-6) ;50V rated
 
 ;DCDC1 Buck Converter (Typically DDR Voltage)
 ;0.6V -> SYS_MAIN @ 1.2A (external resistor divider) -- not provided
@@ -227,11 +227,11 @@ public pcb-module module :
   inst l1    : {ocdb/murata/LQM2HPN2R2MG0L/component}
 
   net (SYS_MAIN pmic.VIN_DCDC1)
-  cap-strap(pmic.VIN_DCDC1, GND, 10.0)
+  cap-strap(pmic.VIN_DCDC1, GND, 10.0e-6)
 
   net sw1 (l1.p[1] pmic.L1)
   net VOUT_VDCDC1 (l1.p[2] pmic.VDCDC1)
-  cap-strap(VOUT_VDCDC1, GND, 10.0)
+  cap-strap(VOUT_VDCDC1, GND, 10.0e-6)
 
 ;DCDC2 Buck Converter (Typically AM335x MPU Voltage)
 ;0.6V -> SYS_MAIN @ 1.2A (external resistor divider) -- not provided
