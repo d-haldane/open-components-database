@@ -90,6 +90,12 @@ public pcb-bundle trd :
 public pcb-bundle usb :
   port data : diff-pair
 
+public pcb-bundle uart4 :
+  pin cts
+  pin txd
+  pin rxd
+  pin rts
+
 public pcb-bundle rgb-led :
   pin r
   pin g
