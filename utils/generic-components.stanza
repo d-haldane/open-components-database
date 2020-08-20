@@ -110,7 +110,7 @@ public defn closest-std-val (v:Double, tol:Double) :
 public pcb-component gen-cap-cmp (cap:Double, tol:Double, max-v:Double, pkg:String) :
   port p : pin[{1 2}]
   symbol = {capacitor-sym(false)}(p[1] => p[1], p[2] => p[2])
-  emodel = Capacitor(cap * 1.0e6, tol, max-v)
+  emodel = Capacitor(cap, tol, max-v)
   package = {ipc-two-pin-package(pkg)}(p[1] => p[1], p[2] => p[2])
   reference-prefix = "C"
   spice :
@@ -125,12 +125,12 @@ public pcb-component gen-cap-cmp (cap:Double, tol:Double, max-v:Double, pkg:Stri
     rated-temperature => [-55.0 125.0]
 
 public defn gen-cap-cmp (cap:Double, max-v:Double) :
-  gen-cap-cmp(cap, 0.2, max-v, "0402")
+  gen-cap-cmp(cap, 20.0, max-v, "0402")
 
 ; 40 is default tolerance due to Yageo cap series 20% tolerance by default
 public defn gen-cap-cmp (cap:Double, pkg:String) :
   ; capacitor(["capacitance" => cap "type" => "ceramic"])
-  gen-cap-cmp(cap, 0.2, 10.0, pkg)
+  gen-cap-cmp(cap, 20.0, 10.0, pkg)
 
 ; 40 is default tolerance due to Yageo cap series 20% tolerance by default
 public defn gen-cap-cmp (cap:Double) :
