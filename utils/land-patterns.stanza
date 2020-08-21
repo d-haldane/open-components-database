@@ -22,6 +22,42 @@ public defn ref-label () :
   ref-label(0.0, 0.0)
 
 ; ====== Land pattern utilities ===============================================
+pcb-pad oval-smd-pad (anchor:Anchor, w:Double, h:Double) :
+  name = to-string("%_x%_ %_ Oval SMD Pad" % [w,h,anchor])
+  type = SMD
+  if w >= h :
+    shape = Capsule(anchor, w, h)
+    layer(Paste(Top)) = Capsule(anchor, w, h)
+    layer(SolderMask(Top)) = Capsule(anchor, w, h)
+  else :
+    shape = Capsule(h, w, loc(0., 0., 90.))
+    layer(Paste(Top)) = Capsule(h, w, loc(0., 0., 90.))
+    layer(SolderMask(Top)) = Capsule(h, w, loc(0., 0., 90.))
+
+public defn oval-smd-pad (w:Double, h:Double) :
+  oval-smd-pad(C, w, h)
+
+pcb-pad oval-pth-pad (anchor:Anchor, drill-w2:Double, drill-h2:Double, pad-w2:Double, pad-h2:Double) :
+  name = to-string("%_ Oval PTH Pad (drill = (%_, %_), pad = (%_, %_))" % [
+           anchor, drill-w2, drill-h2, pad-w2, pad-h2])
+  type = TH
+  if pad-w2 >= pad-h2 :
+    shape = Capsule(anchor, pad-w2, pad-h2)
+    layer(Cutout()) = Capsule(anchor, drill-w2, drill-h2)
+    layer(SolderMask(Top)) = Capsule(anchor, pad-w2, pad-h2)
+    layer(SolderMask(Bottom)) = Capsule(anchor, pad-w2, pad-h2)
+  else :
+    shape = Capsule(pad-h2, pad-w2, loc(0., 0., 90.))
+    layer(Cutout()) = Capsule(drill-h2, drill-w2, loc(0., 0., 90.))
+    layer(SolderMask(Top)) = Capsule(pad-h2, pad-w2, loc(0., 0., 90.))
+    layer(SolderMask(Bottom)) = Capsule(pad-h2, pad-w2, loc(0., 0., 90.))
+
+public defn oval-pth-pad (drill-r:Double, pad-w2:Double, pad-h2:Double) :
+  oval-pth-pad(C, drill-r, drill-r, pad-w2, pad-h2)
+
+public defn oval-pth-pad (drill-w2:Double, drill-h2:Double, pad-w2:Double, pad-h2:Double) :
+  oval-pth-pad(C, drill-w2, drill-h2, pad-w2, pad-h2)
+
 public pcb-pad smd-pad (anchor:Anchor, w:Double, h:Double) :
   name = to-string("%_x%_ %_ SMD Pad" % [w,h,anchor])
   type = SMD
