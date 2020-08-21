@@ -104,7 +104,7 @@ public pcb-package non-plated-hole-pkg (drill-r:Double, mask-r:Double) :
   layer(SolderMask(Top)) = Circle(C, mask-r)
   layer(SolderMask(Bottom)) = Circle(C, mask-r)
   layer(Courtyard(Top)) = Rectangle((drill-r * 2.0), (drill-r * 2.0))
-  layer(Courtyard(Top)) = Rectangle((drill-r * 2.0), (drill-r * 2.0))
+  layer(Silkscreen("Screwhead", Top)) = LineCircle(drill-r * 1.57)
 
 public defn non-plated-hole-pkg (drill-r:Double) :
   non-plated-hole-pkg(drill-r, drill-r)
@@ -124,6 +124,20 @@ public defn LineRectangle (w:Double, h:Double, xc:Double, yc:Double) :
 
 public defn LineRectangle (w:Double, h:Double) :
   LineRectangle(w, h, 0.0, 0.0, 0.254)
+
+public defn LineCircle (r:Double, center:Point, line-w:Double) :
+  val dr = 0.3
+  val dt = dr / r
+  val n-segments = to-int(2.0 * PI / dt)
+  val pts = Vector<Point>()
+  for i in 0 to n-segments do :
+    add(pts, Point(r * cos(dt * to-double(i)), r * sin(dt * to-double(i))))
+  add(pts, Point(r,0.0))
+  Line(line-w, to-tuple(pts))
+
+public defn LineCircle (r:Double) :
+  LineCircle(r, Point(0.0, 0.0), 0.25)
+
 
 public defn PlusSymbol (x:Double, y:Double) :
   Union([
