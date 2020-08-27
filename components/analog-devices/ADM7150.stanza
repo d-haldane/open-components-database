@@ -32,7 +32,7 @@ public pcb-component component (v-out:Double) :
     3.3 : "3.3"
     5.0 : "5.0"
     else : fatal("Invalid output voltage for ADM7150 %_" % [v-out])
-  mpn = to-string("ADM7150ARDZ-%_-R7" % [a-code])
+  mpn = to-string("ADM7150ARDZ-%_" % [a-code])
   pin vin 
   pin en  
   pin vreg
