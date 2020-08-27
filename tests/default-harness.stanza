@@ -71,7 +71,7 @@ public defn default-board (module:Ref, num-layers:Int, width:Double, height:Doub
   unique pcb-design main-design :
     module = {module}
     board = B
-    rules = {ocdb/rules/sierra-adv-rules}
+    rules = {ocdb/rules/jlpcb-std-rules}
   main-design
 ;[/strip]
 

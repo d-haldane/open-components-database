@@ -16,7 +16,7 @@ defpackage ocdb/demo :
   import ocdb/generic-components
   import ocdb/design-vars
 
-OPERATING-TEMPERATURE = [-25.0 50.0]
+public var OPERATING-TEMPERATURE = [-25.0 70.0]
 
 pcb-module demo :
 
@@ -27,7 +27,7 @@ pcb-module demo :
     voltage => [4.95 5.0 5.05]
 
   ocdb/passive-circuits/make-voltage-divider(fmc.vadj, fmc.la03-n, gnd, 
-                                             [0.4925 0.5 0.5175])
+                                             [0.4925 0.5 0.5175] 1.0e-3, 0.5)
 
 
 
