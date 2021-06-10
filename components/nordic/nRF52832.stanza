@@ -130,29 +130,17 @@ public pcb-module module :
   net XC1 (proc.osc.in, xtal.p[2])
   net XC2 (proc.osc.out, xtal.p[1])
   val load-cap = add-xtal-caps(xtal, gnd)
-  check-oscillator(xtal, proc.osc, load-cap)
+  check-oscillator(xtal, property(proc.osc), load-cap)
 
   ; External 32.768 kHz crystal
   inst lfxtal : ocdb/epson/FC-135/component
   net (proc.lfosc.in lfxtal.p[1])
   net (proc.lfosc.out lfxtal.p[2])
   val lf-cap = add-xtal-caps(lfxtal, gnd)
-  check-oscillator(lfxtal, proc.lfosc, lf-cap)
+  check-oscillator(lfxtal, property(proc.lfosc), lf-cap)
 
   net (proc.ANT ant)
-  ; inst ant : {ocdb/johanson/2450AT18A100/component}
-  ; inst lpf : {ocdb/johanson/2450FM07A0029/component}
-  ; net (proc.ANT, lpf.in)
-  ; inst t : t-filter
-  ; net (lpf.out, t.in)
-  ; net (t.out, ant.feed)
-  ; net (t.gnd, lpf.gnd gnd)
-  ; place(proc) at loc(0.0, 0.0) on Top
-  ; place(lpf) at loc(4.7, 0.0) on Top (relative-to proc)
-  ; place(ant) at loc(12.9, 0.0) on Top (relative-to proc)
-  ; place(t.l2) at loc(9.6, 0.0) on Top (relative-to proc)
-  ; layer(Courtyard(Top)) = Rectangle(6.0, 3.0, loc(6.35, 0.0))
-
+  
   for i in 0 to 32 do :
     supports gpio :
       require io:io-pin from proc
